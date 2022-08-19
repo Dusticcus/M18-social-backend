@@ -1,15 +1,16 @@
 const { Schema, model } = require('mongoose');
 
 // REACTION SCHEMA
-const reactionSchema = new mongoose.Schema({
-
-  });
+const reactionSchema = new Schema({
+  text: { type: String, required: true },
+  username: { type: String, required: true },
+});
 
 // THOUGHT SCHEMA
 const thoughtSchema = new Schema(
   {
-    text: {String, required: true},
-    username: {String, required: true},
+    text: { type: String, required: true },
+    username: { type: String, required: true },
     reactions: [reactionSchema],
   },
   {

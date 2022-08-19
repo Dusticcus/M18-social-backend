@@ -1,14 +1,5 @@
 const { Schema, model } = require('mongoose');
 
-const friendSchema = new Schema(
-    {
-        username: {
-            type: String,
-            required: true,
-        }
-    }
-);
-
 const userSchema = new Schema(
     {
         username: {
@@ -23,7 +14,6 @@ const userSchema = new Schema(
             lowercase: true,
             unique: true,
             required: 'Email address is required.',
-            validate: [validateEmail, 'Please fill a valid email address'],
         },
         thoughts: [
             {
@@ -49,5 +39,13 @@ const userSchema = new Schema(
 
 // Initialize our User model
 const User = model('user', userSchema);
-
+// User.create(
+//     { username: 'Dusticcus', email: 'nope@nope.nope' },
+//     (err, data) => {
+//       if (err) {
+//         console.error(err);
+//       }
+//       console.log(data);
+//     }
+//   );
 module.exports = User;
