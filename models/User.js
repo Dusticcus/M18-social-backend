@@ -1,5 +1,18 @@
 const { Schema, model } = require('mongoose');
 
+// const friendSchema = new Schema(
+//     {
+//         username: {
+//             type: String,
+//             required: true,
+//         },
+//         user: {
+//             type: Schema.Types.ObjectId,
+//             ref: "User"
+//           },
+//     }
+// );
+
 const userSchema = new Schema(
     {
         username: {
@@ -24,7 +37,7 @@ const userSchema = new Schema(
         friends: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'Friend',
+                ref: 'User',
             },
         ],
     },

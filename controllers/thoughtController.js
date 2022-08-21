@@ -33,14 +33,53 @@ module.exports = {
       .then((user) =>
         !user
           ? res.status(404).json({
-              message: 'Thought created, but found no user with that ID',
-            })
+            message: 'Thought created, but found no user with that ID',
+          })
           : res.json('Created the application 🎉')
       )
       .catch((err) => {
         console.log(err);
         res.status(500).json(err);
       });
-  }
+  },
+  // Updates a Thought using the findOneAndUpdate method. Uses the ID, and the $set operator in mongodb to inject the request body. Enforces validation.
+  updateThought(req, res) {
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $set: req.body },
+      { runValidators: true, new: true }
+    )
+      .then((application) =>
+        !application
+          ? res.status(404).json({ message: 'No Thought with this id!' })
+          : res.json(application)
+      )
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  },
+  // Deletes a Thought from the database. Looks for an Thought by ID.
+  // Then if the Thought exists, we look for any users associated with the Thought based on he Thought ID and update the Thought array for the User.
+  deleteThought(req, res) {
+    Thought.findOneAndRemove({ _id: req.params.thoughtId })
+      .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: 'No Thought with this id!' })
+          : User.findOneAndUpdate(
+            { applications: req.params.thoughtId },
+            { $pull: { thoughts: req.params.thoughtId } },
+            { new: true }
+          )
+      )
+      .then((user) =>
+        !user
+          ? res.status(404).json({
+            message: 'Thought deleted but no user with this id!',
+          })
+          : res.json({ message: 'Thought successfully deleted!' })
+      )
+      .catch((err) => res.status(500).json(err));
+  },
 
 };
