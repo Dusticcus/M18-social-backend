@@ -2,10 +2,21 @@ const { Schema, model } = require('mongoose');
 const User = require('./User');
 
 // REACTION SCHEMA
-const reactionSchema = new Schema({
-  text: { type: String, required: true },
-  username: { type: String, required: true },
-});
+const reactionSchema = new Schema(
+  {
+    text: {
+      type: String,
+      required: true
+    },
+    username: {
+      type: String,
+      required: true
+    },
+  },
+  {
+    timestamps: true
+  }
+);
 
 // THOUGHT SCHEMA
 const thoughtSchema = new Schema(
@@ -29,6 +40,9 @@ const thoughtSchema = new Schema(
       virtuals: true,
     },
     id: false,
+  },
+  {
+    timestamps: true
   }
 );
 

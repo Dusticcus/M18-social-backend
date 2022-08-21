@@ -1,4 +1,4 @@
-const { User, Thought, Friend } = require('../models');
+const { User, Thought } = require('../models');
 
 module.exports = {
   // Get all Thoughts
@@ -81,5 +81,45 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
+
+  // Creates a new THOUGHT. Accepts a request body with the entire THOUGHT object.
+  // Because THOUGHTS are associated with Users, we then update the User who created the THOUGHT and add the ID of the THOUGHT to the THOUGHTS array
+  createReaction(req, res) {
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $addToSet: { reactions: req.body } },
+      { new: true }
+    )
+      .then((reaction) =>
+        !reaction
+          ? res.status(404).json({
+            message: 'Reaction created, but found no Thought with that ID',
+          })
+          : res.json('Created the application 🎉')
+      )
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  },
+
+  deleteReaction(req, res) {
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      {$pull: {reactions: {_id: req.body.reactionId},
+        },
+      })
+      .then((reaction) =>
+      !reaction
+        ? res.status(404).json({
+          message: 'Reaction created, but found no Thought with that ID',
+        })
+        : res.json('DELETED the REACTION 🎉')
+    )
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+  }
 
 };
