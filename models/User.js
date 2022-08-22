@@ -45,10 +45,17 @@ const userSchema = new Schema(
         toJSON: {
             virtuals: true,
         },
-        id: true,
+        id: false,
     }
 );
 
+// Create a virtual property `getTags` that gets the amount of tags associated with an application
+userSchema
+  .virtual('getFriendCount')
+  // Getter
+  .get(function () {
+    return this.friends.length;
+  });
 
 // Initialize our User model
 const User = model('user', userSchema);
